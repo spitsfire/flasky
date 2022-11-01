@@ -22,10 +22,16 @@ breakfast_bp = Blueprint("breakfast", __name__, url_prefix="/breakfast")
 
 @breakfast_bp.route('', methods=['GET'])
 def get_all_breakfasts():
+    rating_query_value = request.args.get("rating")
+    if rating_query_value is not None:
+        breakfasts = Breakfast.query.filter_by(rating=rating_query_value)
+    else:
+        breakfasts = Breakfast.query.all()
+
     #return("hello world")
     result = []
-    all_breakfasts = Breakfast.query.all()
-    for item in all_breakfasts:
+    
+    for item in breakfasts:
         result.append(item.to_dict())
     
     return jsonify(result), 200
