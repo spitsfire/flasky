@@ -24,8 +24,12 @@ def create_app(testing = None):
     migrate.init_app(app, db)
 
     from app.models.breakfast import Breakfast
+    from app.models.menu import Menu
 
     from .routes.breakfast import breakfast_bp
     app.register_blueprint(breakfast_bp)
+
+    from .routes.menu import menu_bp
+    app.register_blueprint(menu_bp)
 
     return app
