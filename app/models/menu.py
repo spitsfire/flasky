@@ -7,14 +7,11 @@ class Menu(db.Model):
     breakfast_items = db.relationship('Breakfast', back_populates='menu')
 
     def to_dict(self):
-        list_of_breakfasts = []
-        for item in self.breakfast_items:
-            list_of_breakfasts.append(item.to_dict())
         return {
             "id":self.id,
             "restaurant_name":self.restaurant_name,
             "meal":self.meal,
-            "breakfast_items":list_of_breakfasts
+            "breakfast_items":self.get_breakfast_list()
         }
         
     def get_breakfast_list(self):

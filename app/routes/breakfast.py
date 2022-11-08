@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request, abort, make_response
 from app import db
 from app.models.breakfast import Breakfast
+from app.models.menu import Menu
 
 '''
 class Breakfast():
@@ -77,6 +78,25 @@ def delete_one_breakfast(breakfast_id):
     db.session.commit()
 
     return jsonify({"msg": f"Successfully deleted breakfast with id {breakfast_to_delete.id}"}), 200
+
+
+@breakfast_bp.route('/<breakfast_id>/', methods=['PATCH'])
+def add_menu_to_breakfast(breakfast_id):
+    breakfast = get_model_from_id(Breakfast, breakfast_id)
+
+    request_body = request.get_json()
+
+    try:
+        menu_id = request_body['menu_id']
+    except KeyError:
+        return jsonify({"msg": "Missing menu id"}), 400
+
+    menu = get_model_from_id(Menu, menu_id)
+
+    breakfast.menu = menu
+    
+    db.session.commit()
+    return jsonify({"msg": f"Added {breakfast.name} to {menu_id}"})
 
 
 
