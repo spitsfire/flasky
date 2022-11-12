@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, abort, make_response
 from app import db
 from app.models.menu import Menu
-from app.routes.breakfast import get_model_from_id
+from app.routes.helpers import get_model_from_id
 
 menu_bp = Blueprint("menu", __name__, url_prefix="/menu")
 

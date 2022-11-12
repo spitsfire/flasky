@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request, abort, make_response
 from app import db
 from app.models.breakfast import Breakfast
 from app.models.menu import Menu
+from app.models.ingredient import Ingredient
+from app.routes.helpers import get_model_from_id
 
 '''
 class Breakfast():
@@ -99,18 +101,19 @@ def add_menu_to_breakfast(breakfast_id):
     return jsonify({"msg": f"Added {breakfast.name} to {menu_id}"})
 
 
+# ===============================
+#      ASSOCIATION ROUTES
+# ===============================
 
-def get_model_from_id(cls, model_id):
-    try:
-        model_id = int(model_id)
-    except ValueError:
-        return abort(make_response({"msg": f"invalid id for model of type {cls.__name__}: {model_id}"}, 400))
+@breakfast_bp.route('<breakfast_id>/ingredients', methods=['PATCH'])
+def add_ingredients_to_breakfast(breakfast_id):
+    breakfast = get_model_from_id(Breakfast, breakfast_id)
+    request_body = request.get_json()
 
-    chosen_object = cls.query.get(model_id)
+    for id in request_body['ingredient_ids']:
+        ingredient = get_model_from_id(Ingredient, id)
+        breakfast.ingredients.append(ingredient)
 
-    if chosen_object is None:
-        return abort(make_response({"msg": f"Could not find {cls.__name__} item with id: {model_id}"}, 404))
-    
-    return chosen_object
+    db.session.commit()
 
-    
+    return jsonify({"msg": f"Successfully added ingredients to breakfast with id {breakfast.id}"}), 200

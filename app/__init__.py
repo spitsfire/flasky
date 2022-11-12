@@ -32,4 +32,7 @@ def create_app(testing = None):
     from .routes.menu import menu_bp
     app.register_blueprint(menu_bp)
 
+    from .routes.ingredient import ingredient_bp
+    app.register_blueprint(ingredient_bp)
+
     return app
