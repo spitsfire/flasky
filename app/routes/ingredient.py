@@ -3,7 +3,7 @@ from app.models.ingredient import Ingredient
 from app.routes.helpers import get_model_from_id
 from app import db
 
-ingredient_bp = Blueprint("ingredient", __name__, url_prefix="/ingredient")
+ingredient_bp = Blueprint("ingredient", __name__, url_prefix="/ingredients")
 
 @ingredient_bp.route('', methods=['GET'])
 def get_all_ingredients():
@@ -29,7 +29,7 @@ def get_one_ingredient(ingredient_id):
 def create_one_ingredient():
     request_body = request.get_json()
 
-    new_ingredient = ingredient.from_dict(request_body)
+    new_ingredient = Ingredient.from_dict(request_body)
     
     db.session.add(new_ingredient)
     db.session.commit()

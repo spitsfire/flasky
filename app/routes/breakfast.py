@@ -117,3 +117,16 @@ def add_ingredients_to_breakfast(breakfast_id):
     db.session.commit()
 
     return jsonify({"msg": f"Successfully added ingredients to breakfast with id {breakfast.id}"}), 200
+
+@breakfast_bp.route('<breakfast_id>/ingredients', methods=['DELETE'])
+def remove_ingredients_to_breakfast(breakfast_id):
+    breakfast = get_model_from_id(Breakfast, breakfast_id)
+    request_body = request.get_json()
+
+    for id in request_body['ingredient_ids']:
+        ingredient = get_model_from_id(Ingredient, id)
+        breakfast.ingredients.remove(ingredient)
+
+    db.session.commit()
+
+    return jsonify({"msg": f"Successfully deleted ingredients to breakfast with id {breakfast.id}"}), 200

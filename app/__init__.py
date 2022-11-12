@@ -25,6 +25,8 @@ def create_app(testing = None):
 
     from app.models.breakfast import Breakfast
     from app.models.menu import Menu
+    from app.models.ingredient import Ingredient
+    from app.models.breakfast_ingredient import BreakfastIngredient
 
     from .routes.breakfast import breakfast_bp
     app.register_blueprint(breakfast_bp)
